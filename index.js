@@ -3,7 +3,8 @@ const startOrEnd = /\^|\$/;
 
 module.exports = function getRegex(includeList, excludeList) {
   let bad;
-  if (bad = includeList.find(i => excludeList.includes(i))) {
+  const excludeSet = new Set(excludeList);
+  if (bad = includeList.find(i => excludeSet.has(i))) {
     throw new Error(`"${bad}" is included in both the include and exclude lists`);
   } else if (bad = includeList.concat(excludeList).find(w => startOrEnd.test(w))) {
     throw new Error(`"${bad}" contains ^ or $ which is not supported`);
